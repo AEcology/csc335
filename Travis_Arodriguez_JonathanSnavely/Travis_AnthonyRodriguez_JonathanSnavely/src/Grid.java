@@ -98,8 +98,20 @@ public class Grid {
 	private void placeWumpusBloodAndMud(){
 		//ToDo
 	}
+	
+	//Random placement of hunter. Cannot be placed on top of any other object
 	private void placeHunter(){
-		//ToDo
+		Random rand = new Random();
+		int x, y;
+
+		while(true){
+			x = rand.nextInt(10);
+			y = rand.nextInt(10);	
+			if(grid[x][y] != RoomState.SLIME && grid[x][y] != RoomState.PIT && grid[x][y] != RoomState.BLOOD && grid[x][y] != RoomState.WUMPUS && grid[x][y] != RoomState.GOOP){
+				grid[x][y] = RoomState.HUNTER;
+				break;
+			}
+		}
 	}
 	public RoomState Move(Direction d){
 		//ToDo
