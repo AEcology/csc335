@@ -65,12 +65,11 @@ public class Grid {
 	    //Assign Slime
 		for(int i = 0; i < grid.length; i++){
 			for(int j = 0; j < grid.length; j++){
-				
 				if(grid[i][j] == RoomState.PIT){
-					assignSlime(i-2, j);
-					assignSlime(i+2, j);
-					assignSlime(i, j+2);
-					assignSlime(i, j-2);
+					assignSlime(i-1, j);
+					assignSlime(i+1, j);
+					assignSlime(i, j+1);
+					assignSlime(i, j-1);
 				}
 			}
 		}
@@ -78,24 +77,20 @@ public class Grid {
 		
 	//Helper method. Feed x,y coordinates. Will fill in appropriate slime indication "S". Cannot overwrite a pit "P"
 	private void assignSlime(int i, int j) {
-		//ToDo
+
+		//Roll Over
+		if(i == -1)
+			i = 9;
+		else if(i == 10)
+			i = 0;
+		if(j == -1)
+			j = 9;
+		else if(j == 10)
+			j = 0;
 		
-		//Explicit Checks
-		if(i == 0 && j == 0){
-			
-		}
-		else if(i == 1 && j == 0){
-			
-		}
-		else if(i == 0 && j == 1){
-		
-		}
-		else if(i == 1 && j == 1){
-			
-		}
-		
-		//....
-		
+		//Assignment
+		if(grid[i][j] != RoomState.PIT)
+			grid[i][j] = RoomState.SLIME;
 	}
 
 
