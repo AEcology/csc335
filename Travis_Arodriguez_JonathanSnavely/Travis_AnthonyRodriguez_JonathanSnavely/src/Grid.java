@@ -53,7 +53,7 @@ public class Grid {
 	}
 	
 	//Show contents of all rooms	
-	public void RevealRooms(){		WHERE IS THIS USED?
+	public void RevealRooms(){		
 		for(int i=0; i<grid.length; i++)
 			for (int j=0; j<grid.length; j++)
 				visited[i][j] = RoomState.VISITED;

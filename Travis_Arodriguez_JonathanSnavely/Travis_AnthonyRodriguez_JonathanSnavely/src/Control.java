@@ -8,12 +8,14 @@ public class Control {
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
-		while(!(response.equals("Q") || response.equals("q"))){
+		while(!(response.equals("Q") || response.equals("q"))){	
 			response = in.nextLine();
 			if (response.equals("n") || response.equals("N")){
 				RunGame();
 			}
 		}
+		
+		in.close();
 	}
 	
 	public static void PrintControls(){
@@ -94,6 +96,8 @@ public class Control {
 				PrintState(currRoom);
 			}
 		}
+	
+		input.close();
 	}
 	
 	public static void PrintState(RoomState state){
