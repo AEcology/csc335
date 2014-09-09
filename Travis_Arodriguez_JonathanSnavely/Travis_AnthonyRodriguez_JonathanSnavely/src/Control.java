@@ -8,10 +8,15 @@ public class Control {
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
-		while(!(response.equals("Q") || response.equals("q"))){	
+		response = in.nextLine();
+
+		while(true){	
 			response = in.nextLine();
-			if (response.equals("n") || response.equals("N")){
+			if (response.equals("q") || response.equals("Q"))
+				break;
+			if(response.equals("n") || response.equals("N")){
 				RunGame();
+				break;
 			}
 		}
 		
@@ -32,7 +37,7 @@ public class Control {
 	}
 	
 
-	public static void RunGame(){
+	public static boolean RunGame(){
 		boolean keepGoing = true;
 		Grid game = new Grid();
 		Scanner input = new Scanner(System.in);
@@ -98,6 +103,7 @@ public class Control {
 		}
 	
 		input.close();
+		return false;
 	}
 	
 	public static void PrintState(RoomState state){
