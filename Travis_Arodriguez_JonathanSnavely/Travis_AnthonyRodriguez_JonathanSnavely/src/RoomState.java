@@ -7,22 +7,34 @@
  */
 public enum RoomState {
 	HUNTER 		("O"),
-	HIDDENROOM 	("X"),
+	EMPTY	 	(" "),
 	SLIME 		("S"),
 	BLOOD		("B"),
 	GOOP		("G"),
 	WUMPUS		("W"),
-	PIT			("P"),
-	VISITED		(" ");
+	PIT			("P");
 	
     private final String roomValue;
+    private boolean hidden;
     
     RoomState(String roomValue){
     	this.roomValue = roomValue;
+    	this.hidden = true;
+    }
+    
+    public void visit(){
+    	this.hidden = false;
+    }
+    
+    public boolean isHidden(){
+    	return this.hidden;
     }
     
     //Use for toString() of Grid
     public String getValue(){
-    	return this.roomValue;
+    	if (hidden)
+    		return "[X]";
+    	else
+    		return "[" + this.roomValue + "]";
     }
 }

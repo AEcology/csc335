@@ -1,3 +1,5 @@
+//TODO: Delete this class (Too lazy to figure out how do delete from repo yet)
+
 
 public class Room {
 	/*

@@ -10,14 +10,19 @@ import java.util.Random;
  */
 public class Grid {
 
-	RoomState grid[][];
+	private RoomState grid[][];
+	//Current room has hunter regardless, so keep track
+	//of what is in the room and 
+	private RoomState currentRoom = RoomState.EMPTY;
+	private int currRow = 0;
+	private int currCol = 0;
 	
 	public Grid(){
 		grid = new RoomState[10][10];
 
 		for(int i = 0; i < grid.length; i++){
 			for(int j = 0; j < grid.length; j++)
-				grid[i][j] = RoomState.HIDDENROOM;
+				grid[i][j] = RoomState.EMPTY;
 		}
 		
 		placePitsAndSlime();
@@ -42,6 +47,12 @@ public class Grid {
 		}
 	}
 	
+	//Show contents of all rooms
+	public void RevealRooms(){
+		for(int i=0; i<grid.length; ++i)
+			for (int j=0; j<grid.length; ++j)
+				grid[i][j].visit();
+	}
 	
 	/**
 	 * Adds 3-5 pits and associated slime.
@@ -56,7 +67,7 @@ public class Grid {
 			x = rand.nextInt(10);
 			y = rand.nextInt(10);
 			
-			if(grid[x][y] != RoomState.HIDDENROOM)
+			if(grid[x][y] != RoomState.EMPTY)
 				i--;
 			else
 				grid[x][y] = RoomState.PIT;
@@ -96,7 +107,47 @@ public class Grid {
 
 
 	private void placeWumpusBloodAndMud(){
-		//ToDo
+		Random rand = new Random();
+		boolean success = false;
+		int x = 0;
+		int y = 0;
+		//Place Wumpus
+		while(!success){
+			x = rand.nextInt(10);
+			y = rand.nextInt(10);
+			if (grid[x][y]!=RoomState.PIT){
+				grid[x][y] = RoomState.WUMPUS;
+				success = true;
+			}
+		}
+		//Place blood (unrolled loop)
+		assignBlood(x+1, y);
+		assignBlood(x+2, y);
+		assignBlood(x-1, y);
+		assignBlood(x-2, y);
+		assignBlood(x, y+1);
+		assignBlood(x, y+2);
+		assignBlood(x, y-1);
+		assignBlood(x, y-2);
+		assignBlood(x+1, y+1);
+		assignBlood(x-1, y+1);
+		assignBlood(x+1, y-1);
+		assignBlood(x-1, y-1);
+	}
+	
+	private void assignBlood(int x, int y){
+		if (x>9)
+			x = x-10;
+		else if (x<0)
+			x = 10+x;
+		if (y>9)
+			y = y-10;
+		else if (y<0)
+			y = 10+y;
+		if (grid[x][y]==RoomState.EMPTY)
+			grid[x][y] = RoomState.BLOOD;
+		else if (grid[x][y]==RoomState.SLIME)
+			grid[x][y] = RoomState.GOOP;
 	}
 	
 	//Random placement of hunter. Cannot be placed on top of any other object
@@ -109,17 +160,75 @@ public class Grid {
 			y = rand.nextInt(10);	
 			if(grid[x][y] != RoomState.SLIME && grid[x][y] != RoomState.PIT && grid[x][y] != RoomState.BLOOD && grid[x][y] != RoomState.WUMPUS && grid[x][y] != RoomState.GOOP){
 				grid[x][y] = RoomState.HUNTER;
+				grid[x][y].visit();
 				break;
 			}
 		}
+		currRow = x;
+		currCol = y;
 	}
+	
+	//update x,y, restore state of old room,
+	//save state of new room and set state to HUNTER
+	//Note: Directions dont seem the same as their +x, +y offsets 
+	//because arrays are represented as arry[row][col]
 	public RoomState Move(Direction d){
-		//ToDo
-		return RoomState.BLOOD;
+		if (d==Direction.RIGHT){
+			grid[currRow][currCol] = currentRoom;
+			if (currCol==grid.length-1)
+				currCol = 0;
+			else
+				++currCol;
+			grid[currRow][currCol].visit();
+			currentRoom = grid[currCol][currRow];
+			grid[currRow][currCol] = RoomState.HUNTER;
+		}
+		else if (d==Direction.LEFT){
+			grid[currRow][currCol] = currentRoom;
+			if (currCol==0)
+				currCol = grid.length-1;
+			else
+				--currCol;
+			grid[currRow][currCol].visit();
+			currentRoom = grid[currRow][currCol];
+			grid[currRow][currCol] = RoomState.HUNTER;
+		}
+		else if (d==Direction.DOWN){
+			grid[currRow][currCol] = currentRoom;
+			if (currRow == grid.length-1)
+				currRow = 0;
+			else
+				++currRow;
+			grid[currRow][currCol].visit();
+			currentRoom = grid[currRow][currCol];
+			grid[currRow][currCol] = RoomState.HUNTER;
+		}
+		else if (d==Direction.UP){
+			grid[currRow][currCol] = currentRoom;
+			if (currRow == 0)
+				currRow = grid.length-1;
+			else
+				--currRow;
+			grid[currRow][currCol].visit();
+			currentRoom = grid[currRow][currCol];
+			grid[currRow][currCol] = RoomState.HUNTER;
+		}
+		return currentRoom;
 	}
+	
+	//Shoot: Note: x/y switched because array access is arry[row][col]
 	public boolean Shoot(Direction d){
-		//ToDo
-		return true;
+		if (d==Direction.UP || d==Direction.DOWN){
+			for(int row=0; row<grid.length; ++row)
+				if (grid[row][currCol]==RoomState.WUMPUS)
+					return true;
+		}
+		else if (d==Direction.RIGHT || d==Direction.LEFT){
+			for(int col=0; col<grid.length; ++col)
+				if (grid[currRow][col]==RoomState.WUMPUS)
+					return true;
+		}
+		return false;
 	}
 	
 	public String toString(){
