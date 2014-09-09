@@ -11,18 +11,23 @@ import java.util.Random;
 public class Grid {
 
 	private RoomState grid[][];
+	private RoomState visited[][];
+	
 	//Current room has hunter regardless, so keep track
 	//of what is in the room and 
-	private RoomState currentRoom = RoomState.EMPTY;
+	private RoomState currentRoom = RoomState.EMPTY;	
 	private int currRow = 0;
 	private int currCol = 0;
 	
 	public Grid(){
 		grid = new RoomState[10][10];
+		visited = new RoomState[10][10];
 
 		for(int i = 0; i < grid.length; i++){
-			for(int j = 0; j < grid.length; j++)
+			for(int j = 0; j < grid.length; j++){
 				grid[i][j] = RoomState.EMPTY;
+				visited[i][j] = RoomState.HIDDEN;
+			}
 		}
 		
 		placePitsAndSlime();
@@ -49,9 +54,9 @@ public class Grid {
 	
 	//Show contents of all rooms
 	public void RevealRooms(){
-		for(int i=0; i<grid.length; ++i)
-			for (int j=0; j<grid.length; ++j)
-				grid[i][j].visit();
+		for(int i=0; i<grid.length; i++)
+			for (int j=0; j<grid.length; j++)
+				visited[i][j] = RoomState.VISITED;
 	}
 	
 	/**
@@ -105,7 +110,6 @@ public class Grid {
 	}
 
 
-
 	private void placeWumpusBloodAndMud(){
 		Random rand = new Random();
 		boolean success = false;
@@ -115,7 +119,7 @@ public class Grid {
 		while(!success){
 			x = rand.nextInt(10);
 			y = rand.nextInt(10);
-			if (grid[x][y]!=RoomState.PIT){
+			if (grid[x][y]!=RoomState.PIT && grid[x][y]!=RoomState.SLIME){
 				grid[x][y] = RoomState.WUMPUS;
 				success = true;
 			}
@@ -160,59 +164,52 @@ public class Grid {
 			y = rand.nextInt(10);	
 			if(grid[x][y] != RoomState.SLIME && grid[x][y] != RoomState.PIT && grid[x][y] != RoomState.BLOOD && grid[x][y] != RoomState.WUMPUS && grid[x][y] != RoomState.GOOP){
 				grid[x][y] = RoomState.HUNTER;
-				grid[x][y].visit();
+				visited[x][y] = RoomState.VISITED;
 				break;
 			}
 		}
+		
+		//Hunter Coordinates
 		currRow = x;
 		currCol = y;
 	}
 	
-	//update x,y, restore state of old room,
-	//save state of new room and set state to HUNTER
-	//Note: Directions dont seem the same as their +x, +y offsets 
-	//because arrays are represented as arry[row][col]
+	/**update x,y, restore state of old room,
+	save state of new room and set state to HUNTER
+	Note: Directions dont seem the same as their +x, +y offsets 
+	because arrays are represented as arry[row][col]*/
 	public RoomState Move(Direction d){
+		grid[currRow][currCol] = currentRoom;
+		
 		if (d==Direction.RIGHT){
-			grid[currRow][currCol] = currentRoom;
 			if (currCol==grid.length-1)
 				currCol = 0;
 			else
 				++currCol;
-			grid[currRow][currCol].visit();
-			currentRoom = grid[currCol][currRow];
-			grid[currRow][currCol] = RoomState.HUNTER;
 		}
 		else if (d==Direction.LEFT){
-			grid[currRow][currCol] = currentRoom;
 			if (currCol==0)
 				currCol = grid.length-1;
 			else
 				--currCol;
-			grid[currRow][currCol].visit();
-			currentRoom = grid[currRow][currCol];
-			grid[currRow][currCol] = RoomState.HUNTER;
 		}
 		else if (d==Direction.DOWN){
-			grid[currRow][currCol] = currentRoom;
 			if (currRow == grid.length-1)
 				currRow = 0;
 			else
 				++currRow;
-			grid[currRow][currCol].visit();
-			currentRoom = grid[currRow][currCol];
-			grid[currRow][currCol] = RoomState.HUNTER;
 		}
-		else if (d==Direction.UP){
-			grid[currRow][currCol] = currentRoom;
+		else{
 			if (currRow == 0)
 				currRow = grid.length-1;
 			else
 				--currRow;
-			grid[currRow][currCol].visit();
-			currentRoom = grid[currRow][currCol];
-			grid[currRow][currCol] = RoomState.HUNTER;
 		}
+		
+		visited[currRow][currCol] = RoomState.VISITED;
+		currentRoom = grid[currCol][currRow];
+		grid[currRow][currCol] = RoomState.HUNTER;	
+		
 		return currentRoom;
 	}
 	
