@@ -165,6 +165,8 @@ public class Grid {
 			if(grid[x][y] != RoomState.SLIME && grid[x][y] != RoomState.PIT && grid[x][y] != RoomState.BLOOD && grid[x][y] != RoomState.WUMPUS && grid[x][y] != RoomState.GOOP){
 				grid[x][y] = RoomState.HUNTER;
 				visited[x][y] = RoomState.VISITED;
+				currRow = x;
+				currCol = y;
 				break;
 			}
 		}

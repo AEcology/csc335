@@ -8,7 +8,6 @@ public class Control {
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
-		response = in.nextLine();
 
 		while(true){	
 			response = in.nextLine();
@@ -36,7 +35,6 @@ public class Control {
 		System.out.println("Quit: Q");
 	}
 	
-
 	public static boolean RunGame(){
 		boolean keepGoing = true;
 		Grid game = new Grid();
@@ -88,8 +86,8 @@ public class Control {
 			else if (command.equals("D") || command.equals("d")){
 				currRoom = game.Move(Direction.RIGHT);
 			}
-			else
-				PrintControls();
+		//	else
+		//		PrintControls();
 			if (currRoom==RoomState.WUMPUS || currRoom==RoomState.PIT){
 				keepGoing = false;
 				game.RevealRooms();
