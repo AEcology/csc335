@@ -52,8 +52,8 @@ public class Grid {
 		}
 	}
 	
-	//Show contents of all rooms
-	public void RevealRooms(){
+	//Show contents of all rooms	
+	public void RevealRooms(){		WHERE IS THIS USED?
 		for(int i=0; i<grid.length; i++)
 			for (int j=0; j<grid.length; j++)
 				visited[i][j] = RoomState.VISITED;
@@ -232,8 +232,13 @@ public class Grid {
 		
 		String result = "";
 		for (int i = 0; i < grid.length; i++){
-			for (int j = 0; j < grid.length; j++)
-				result += grid[i][j].getValue() + " ";
+			for (int j = 0; j < grid.length; j++){
+				if(visited[i][j] == RoomState.HIDDEN)
+					result += RoomState.HIDDEN.getValue() + " ";
+				else
+					result += grid[i][j].getValue() + " ";
+			}
+				
 			result = result.trim() + "\n";
 		}
 		

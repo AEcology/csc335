@@ -4,15 +4,11 @@ import java.util.Scanner;
 public class Control {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		System.out.println("Hunt the Wumpus!");
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
 		while(!(response.equals("Q") || response.equals("q"))){
-			System.out.println(" ");
-			System.out.println("New game: N");
-			System.out.println("Quit: Q");
 			response = in.nextLine();
 			if (response.equals("n") || response.equals("N")){
 				RunGame();
@@ -21,12 +17,16 @@ public class Control {
 	}
 	
 	public static void PrintControls(){
+		System.out.println();
 		System.out.println("Controls:");
 		System.out.println("Up: W");
 		System.out.println("Down: S");
 		System.out.println("Left: A");
 		System.out.println("Right: D");
 		System.out.println("Shoot: K");
+		System.out.println();
+		System.out.println("New game: N");
+		System.out.println("Quit: Q");
 	}
 	
 
