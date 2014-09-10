@@ -4,33 +4,38 @@ import java.util.Scanner;
 public class Control {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		System.out.println("Hunt the Wumpus!");
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
-		while(!(response.equals("Q") || response.equals("q"))){
-			System.out.println(" ");
-			System.out.println("New game: N");
-			System.out.println("Quit: Q");
+
+		while(true){	
 			response = in.nextLine();
-			if (response.equals("n") || response.equals("N")){
+			if (response.equals("q") || response.equals("Q"))
+				break;
+			if(response.equals("n") || response.equals("N")){
 				RunGame();
+				break;
 			}
 		}
+		
+		in.close();
 	}
 	
 	public static void PrintControls(){
+		System.out.println();
 		System.out.println("Controls:");
 		System.out.println("Up: W");
 		System.out.println("Down: S");
 		System.out.println("Left: A");
 		System.out.println("Right: D");
 		System.out.println("Shoot: K");
+		System.out.println();
+		System.out.println("New game: N");
+		System.out.println("Quit: Q");
 	}
 	
-
-	public static void RunGame(){
+	public static boolean RunGame(){
 		boolean keepGoing = true;
 		Grid game = new Grid();
 		Scanner input = new Scanner(System.in);
@@ -81,8 +86,8 @@ public class Control {
 			else if (command.equals("D") || command.equals("d")){
 				currRoom = game.Move(Direction.RIGHT);
 			}
-			else
-				PrintControls();
+		//	else
+		//		PrintControls();
 			if (currRoom==RoomState.WUMPUS || currRoom==RoomState.PIT){
 				keepGoing = false;
 				game.RevealRooms();
@@ -94,6 +99,9 @@ public class Control {
 				PrintState(currRoom);
 			}
 		}
+	
+		input.close();
+		return false;
 	}
 	
 	public static void PrintState(RoomState state){
