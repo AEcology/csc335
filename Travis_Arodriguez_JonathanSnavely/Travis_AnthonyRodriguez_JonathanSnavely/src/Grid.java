@@ -209,7 +209,9 @@ public class Grid {
 		}
 		
 		visited[currRow][currCol] = RoomState.VISITED;
+
 		currentRoom = grid[currRow][currCol];
+
 		grid[currRow][currCol] = RoomState.HUNTER;	
 		
 		return currentRoom;
