@@ -39,17 +39,25 @@ public class Grid {
 	public Grid(boolean value){
 		
 		grid = new RoomState[10][10];
+		visited = new RoomState[10][10];
+		
 		for(int i = 0; i < grid.length; i++){
-
 			for(int j = 0; j < grid.length; j++){
-				if(j == 0 || j == 3 || j == 6 || j == 9)
-					grid[i][j] = RoomState.BLOOD;
-				else if(j == 1 || j == 4 || j == 7)
-					grid[i][j] = RoomState.GOOP;	
-				else
-					grid[i][j] = RoomState.PIT;
+				grid[i][j] = RoomState.EMPTY;
+				visited[i][j] = RoomState.HIDDEN;
 			}
 		}
+		
+		//Known Placement
+		grid[3][4] = RoomState.SLIME;
+		grid[3][5] = RoomState.PIT;
+		grid[5][4] = RoomState.GOOP;
+		grid[4][4] = RoomState.BLOOD;
+		grid[4][5] = RoomState.WUMPUS;
+		grid[4][3] = RoomState.HUNTER;
+		visited[4][3] = RoomState.VISITED;
+		currRow = 4;
+		currCol = 3;
 	}
 	
 	//Show contents of all rooms	

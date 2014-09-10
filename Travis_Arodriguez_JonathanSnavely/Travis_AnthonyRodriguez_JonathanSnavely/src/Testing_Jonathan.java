@@ -23,15 +23,14 @@ public class Testing_Jonathan {
 		assertEquals(result, "UPDOWNLEFTRIGHT");
 	}
 	
-	//Out of date: Re-implement if necessary
-	/*@Test
+	@Test
 	public void testRoomStateEnum() {
 
 		String result = "";
 		for(RoomState room: RoomState.values()){
 			result += room;
 		}
-		assertEquals(result, "HUNTERHIDDENROOMSLIMEBLOODGOOPWUMPUSPITVISITED");
+		assertEquals(result, "HUNTEREMPTYSLIMEBLOODGOOPWUMPUSPITHIDDENVISITED");
 	}
 	
 	@Test
@@ -41,32 +40,41 @@ public class Testing_Jonathan {
 		for(RoomState room: RoomState.values()){
 			result += room.getValue();
 		}
-		assertEquals(result, "OXSBGWP ");
-	}*/		
+		assertEquals(result, "[O][ ][S][B][G][W][P][X][ ]");
+	}				
 	
 	@Test
-	public void testGridToString() {
+	public void testSlimePit(){
 		Grid grid = new Grid(true);
-		String expected = "";
-		
-		for(int i = 0; i < 10; i++){
-			for(int j = 0; j < 10; j++){
-				if(j == 0 || j == 3 || j == 6 || j == 9)
-					expected += RoomState.BLOOD.getValue() + " ";
-				else if(j == 1 || j == 4 || j == 7)
-					expected += RoomState.GOOP.getValue() + " ";	
-				else
-					expected += RoomState.PIT.getValue() + " ";
-			}	
-			expected = expected.trim() + "\n";
-		}
-		assertEquals(expected, grid.toString());
-	}			
+		RoomState currRoom;
+		currRoom = grid.Move(Direction.UP);
+		assertEquals(currRoom, RoomState.EMPTY);
+		currRoom = grid.Move(Direction.RIGHT);
+		assertEquals(currRoom, RoomState.SLIME);
+		currRoom = grid.Move(Direction.RIGHT);
+		assertEquals(currRoom, RoomState.PIT);
+	}	
 	
 	@Test
-	public void testGridPrintout(){
-		Grid grid = new Grid();
-		grid.RevealRooms();
-		System.out.println(grid);
+	public void testArrow(){
+		Grid grid = new Grid(true);
+		assertEquals(grid.Shoot(Direction.RIGHT), true);
+		assertEquals(grid.Shoot(Direction.LEFT), true);
+		assertEquals(grid.Shoot(Direction.UP), false);
+		assertEquals(grid.Shoot(Direction.DOWN), false);
+	}		
+		
+	@Test
+	public void testGoop(){
+		Grid grid = new Grid(true);
+		assertEquals(grid.Move(Direction.DOWN), RoomState.EMPTY);	
+		assertEquals(grid.Move(Direction.RIGHT), RoomState.GOOP);
 	}
+	
+//	@Test
+//	public void testGridPrintout(){
+//		Grid grid = new Grid(true);
+//		grid.RevealRooms();
+//		System.out.println(grid);
+//	}
 }
