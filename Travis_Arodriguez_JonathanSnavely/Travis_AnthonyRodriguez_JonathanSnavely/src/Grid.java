@@ -19,6 +19,8 @@ public class Grid {
 	private int currRow = 0;
 	private int currCol = 0;
 	
+	
+	//Constructor
 	public Grid(){
 		grid = new RoomState[10][10];
 		visited = new RoomState[10][10];
@@ -117,7 +119,7 @@ public class Grid {
 			grid[i][j] = RoomState.SLIME;
 	}
 
-
+	//Places Wumpus, blood, goop
 	private void placeWumpusBloodAndMud(){
 		Random rand = new Random();
 		boolean success = false;
@@ -147,6 +149,7 @@ public class Grid {
 		assignBlood(x-1, y-1);
 	}
 	
+	//Place blood
 	private void assignBlood(int x, int y){
 		if (x>9)
 			x = x-10;
@@ -223,6 +226,18 @@ public class Grid {
 		grid[currRow][currCol] = RoomState.HUNTER;	
 		
 		return currentRoom;
+	}
+	
+	public RoomState getCurrentRoom(){
+		return currentRoom;
+	}
+	
+	public int getCurrCol(){
+		return currCol;
+	}
+	
+	public int getCurrRow(){
+		return currRow;
 	}
 	
 	//Shoot: Note: x/y switched because array access is arry[row][col]

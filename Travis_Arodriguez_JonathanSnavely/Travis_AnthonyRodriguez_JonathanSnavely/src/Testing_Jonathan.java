@@ -12,6 +12,51 @@ import org.junit.Test;
 
 public class Testing_Jonathan {
 
+	//Recursive FullTest: Recursively visits all safe spots in a randomly generated grid and prints the result
+	@Test
+	public void FullTest(){
+		boolean ourGrid[][] = new boolean[10][10];
+		for (int i=0; i<10; ++i)
+			for (int j=0; j<10; ++j)
+				ourGrid[i][j] = false;
+		System.out.println("Recursive search result:");
+		Grid game = new Grid();
+		//ourGrid[game.getCurrRow()][game.getCurrCol()] = true;
+		RecursiveStep(game, Direction.UP, ourGrid);
+		System.out.println(game);
+		assertTrue(true);
+	}
+	//Helper function for FullTest
+	private void RecursiveStep(Grid game, Direction d, boolean ourGrid[][]){
+		if (game.getCurrentRoom()==RoomState.GOOP || game.getCurrentRoom()==RoomState.BLOOD || game.getCurrentRoom()==RoomState.SLIME
+				|| ourGrid[game.getCurrRow()][game.getCurrCol()]==true)
+			return;
+		else{
+			ourGrid[game.getCurrRow()][game.getCurrCol()] = true;
+			if (d!=Direction.DOWN){
+				game.Move(Direction.UP);
+				RecursiveStep(game, Direction.UP, ourGrid);
+				game.Move(Direction.DOWN);
+			}
+			if (d!=Direction.LEFT){
+				game.Move(Direction.RIGHT);
+				RecursiveStep(game, Direction.RIGHT, ourGrid);
+				game.Move(Direction.LEFT);
+			}
+			if (d!=Direction.UP){
+				game.Move(Direction.DOWN);
+				RecursiveStep(game, Direction.DOWN, ourGrid);
+				game.Move(Direction.UP);
+			}
+			if (d!=Direction.RIGHT){
+				game.Move(Direction.LEFT);
+				RecursiveStep(game, Direction.LEFT, ourGrid);
+				game.Move(Direction.RIGHT);
+			}
+		}
+	}
+	
+	
 	@Test
 	public void testDirectionEnum() {
 

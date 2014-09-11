@@ -22,6 +22,7 @@ public class Control {
 		in.close();
 	}
 	
+	//Prints controls for game
 	public static void PrintControls(){
 		System.out.println();
 		System.out.println("Controls:");
@@ -35,6 +36,8 @@ public class Control {
 		System.out.println("Quit: Q");
 	}
 	
+	
+	//Game main loop
 	public static boolean RunGame(){
 		boolean keepGoing = true;
 		Grid game = new Grid();
@@ -104,6 +107,8 @@ public class Control {
 		return false;
 	}
 	
+	
+	//Print a message based upon the state of the current room
 	public static void PrintState(RoomState state){
 		if (state==RoomState.EMPTY)
 			System.out.println("It's quiet......Too quiet >_> ..... <_<");
