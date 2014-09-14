@@ -1,7 +1,12 @@
+package control;
+
 import java.util.Scanner;
 
+import view.*;
+import model.*;
 
 public class Control {
+
 
 	public static void main(String[] args) {
 		System.out.println("Hunt the Wumpus!");
@@ -14,7 +19,7 @@ public class Control {
 			if (response.equals("q") || response.equals("Q"))
 				break;
 			if(response.equals("n") || response.equals("N")){
-				RunGame();
+				RunGUIGame();
 				break;
 			}
 		}
@@ -37,8 +42,14 @@ public class Control {
 	}
 	
 	
-	//Game main loop
-	public static boolean RunGame(){
+	//Game main loop(GUI)
+	public static boolean RunGUIGame(){
+		WumpusGUI game = new WumpusGUI();
+		return true;
+	}
+	
+	//Game main loop(text)
+	public static boolean RunTextGame(){
 		boolean keepGoing = true;
 		Grid game = new Grid();
 		Scanner input = new Scanner(System.in);
