@@ -10,6 +10,7 @@ public class WumpusGUI extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setLocation(200, 100);
+		setLayout(null);
 	}
 	
 }

@@ -44,7 +44,14 @@ public class Control {
 	
 	//Game main loop(GUI)
 	public static boolean RunGUIGame(){
-		WumpusGUI game = new WumpusGUI();
+		boolean keepGoing = true;
+		Scanner input = new Scanner(System.in);
+		//WumpusGUI game = new WumpusGUI();
+		new WumpusGUI().setVisible(true);
+		while(keepGoing){
+			
+			
+		}
 		return true;
 	}
 	
