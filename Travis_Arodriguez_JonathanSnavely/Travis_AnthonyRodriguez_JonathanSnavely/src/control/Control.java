@@ -13,7 +13,7 @@ public class Control {
 		PrintControls();
 		String response = " ";
 		Scanner in = new Scanner(System.in);
-
+		/*
 		while(true){	
 			response = in.nextLine();
 			if (response.equals("q") || response.equals("Q"))
@@ -22,7 +22,8 @@ public class Control {
 				RunGUIGame();
 				break;
 			}
-		}
+		}*/
+		RunGUIGame();
 		
 		in.close();
 	}
