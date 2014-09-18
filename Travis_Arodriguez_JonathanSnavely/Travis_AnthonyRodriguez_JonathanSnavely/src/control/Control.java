@@ -14,7 +14,7 @@ public class Control {
 
 	public static void main(String[] args) {
 		System.out.println("Hunt the Wumpus!");
-		PrintControls();
+		//PrintControls();
 		new WumpusGUI().setVisible(true);
 	}
 	

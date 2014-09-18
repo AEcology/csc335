@@ -19,7 +19,7 @@ import model.Direction;
 import model.GameStatus;
 import model.Grid;
 
-public class WumpusGUI extends JFrame{
+public class WumpusGUI extends JFrame implements Observer{
 
 	private Grid game;
 	private TextViewPanel textViewPanel;
@@ -31,7 +31,7 @@ public class WumpusGUI extends JFrame{
 	
 	public WumpusGUI(){
 		game = new Grid();
-		textViewPanel = new TextViewPanel();
+		textViewPanel = new TextViewPanel(game);
 		guiViewPanel = new GUIViewPanel();
 		viewContainer = new JTabbedPane();
 		moveButtonPanel = new MoveButtonPanel();
@@ -41,6 +41,7 @@ public class WumpusGUI extends JFrame{
 		
 		game.addObserver((Observer) textViewPanel);
 		game.addObserver((Observer) guiViewPanel);
+		game.addObserver(this);
 	}
 	
 	private void layoutThisFrame(){
@@ -52,8 +53,8 @@ public class WumpusGUI extends JFrame{
 		setLayout(null);		
 		
 		/*JTabbedPane editing*/
-		viewContainer.setSize(400, 400);
-		viewContainer.setLocation(200, 50);
+		viewContainer.setSize(550, 550);
+		viewContainer.setLocation(200, 0);
 		viewContainer.addTab("Graphical View", guiViewPanel);
 		viewContainer.addTab("Text View", textViewPanel);
 		add(viewContainer);
@@ -174,6 +175,27 @@ public class WumpusGUI extends JFrame{
 			add(left);
 			add(down);
 			add(right);
+		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		GameStatus status = (GameStatus)arg1;
+		if(status == GameStatus.SHOTMISSED){
+			remove(arrowButtonPanel);
+			remove(moveButtonPanel);
+		}
+		else if(status == GameStatus.SHOTHIT){
+			remove(arrowButtonPanel);
+			remove(moveButtonPanel);
+		}
+		else if(status == GameStatus.DIEDWUMPUS){
+			remove(arrowButtonPanel);
+			remove(moveButtonPanel);
+		}
+		else if(status == GameStatus.DIEDPIT){
+			remove(arrowButtonPanel);
+			remove(moveButtonPanel);
 		}
 	}
 }

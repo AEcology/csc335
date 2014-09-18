@@ -27,7 +27,7 @@ public class GUIViewPanel extends JPanel implements Observer{
 		
 		else if(status == GameStatus.DIEDPIT)
 			game.RevealRooms();
-		
+		/*
 		else if(status == GameStatus.ONSLIME)
 			game.RevealRooms();
 
@@ -39,7 +39,7 @@ public class GUIViewPanel extends JPanel implements Observer{
 		
 		else if(status == GameStatus.ONNOTHING)
 			game.RevealRooms();		
-		
+		*/
 		//TODO: End the game if appropriate here
 
 		repaint();

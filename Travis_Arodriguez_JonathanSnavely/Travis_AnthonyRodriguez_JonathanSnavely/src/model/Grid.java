@@ -220,6 +220,22 @@ public class Grid extends Observable{
 		return currentRoom;
 	}
 	
+	public String getRoomText(){
+		if (currentRoom==RoomState.BLOOD)
+			return "Blood!";
+		else if (currentRoom==RoomState.EMPTY)
+			return "Nothing in this room...";
+		else if (currentRoom==RoomState.GOOP)
+			return "There's goop on the ground!";
+		else if (currentRoom==RoomState.PIT)
+			return "You fell to your doom!";
+		else if (currentRoom == RoomState.SLIME)
+			return "SLIIIME!";
+		else if (currentRoom==RoomState.WUMPUS)
+			return "The Wumpus caught ye!";
+		else return "Oh noes, an error is occured! #&*(&#!";
+	}
+	
 	public int getCurrCol(){
 		return currCol;
 	}
@@ -245,9 +261,9 @@ public class Grid extends Observable{
 					this.notifyObservers(GameStatus.SHOTHIT);
 				}
 		}
-		
+		else
+			this.notifyObservers(GameStatus.SHOTMISSED);
 		setChanged();
-		this.notifyObservers(GameStatus.SHOTMISSED);
 	}
 	
 	public String toString(){
