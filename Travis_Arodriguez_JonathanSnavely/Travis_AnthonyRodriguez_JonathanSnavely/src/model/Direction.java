@@ -5,7 +5,6 @@ package model;
  * 
  * @author Anthony Rodriguez
  * @author Jonathan Snavely
- *
  */
 public enum Direction {
 	UP,
@@ -13,5 +12,3 @@ public enum Direction {
 	LEFT,
 	RIGHT;
 }
-
-

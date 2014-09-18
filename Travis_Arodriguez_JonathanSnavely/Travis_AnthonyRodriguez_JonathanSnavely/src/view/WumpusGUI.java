@@ -1,16 +1,22 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicArrowButton;
 
+import model.Direction;
+import model.GameStatus;
 import model.Grid;
 
 public class WumpusGUI extends JFrame{
@@ -24,6 +30,7 @@ public class WumpusGUI extends JFrame{
 	private ArrowButtonPanel arrowButtonPanel;
 	
 	public WumpusGUI(){
+		game = new Grid();
 		textViewPanel = new TextViewPanel();
 		guiViewPanel = new GUIViewPanel();
 		viewContainer = new JTabbedPane();
@@ -31,67 +38,142 @@ public class WumpusGUI extends JFrame{
 		arrowButtonPanel = new ArrowButtonPanel();
 		
 		layoutThisFrame();
-		addListeners();	//TODO: will not need, listeners implemented within their container JPanels
-			
-//		GUIButton = new JToggleButton("Graphical View");
-//		GUIButton.addActionListener(new GUIButtonListener());
-//		GUIButton.setSize(150, 20);
-//		GUIButton.setLocation(250,20);
-//		add(GUIButton);
-//		TextViewButton = new JToggleButton("Text View");
-//		TextViewButton.setSize(150, 20);
-//		TextViewButton.setLocation(400,20);
-//		TextViewButton.addActionListener(new TextButtonListener());
-//		add(TextViewButton);
-//		TextViewButton.setSelected(false);
-//		GUIButton.setSelected(true);
+		
+		game.addObserver((Observer) textViewPanel);
+		game.addObserver((Observer) guiViewPanel);
 	}
 	
 	private void layoutThisFrame(){
+		/*JFrame Editing*/
 		setTitle("Hunt the Wumpus!");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setLocation(200, 100);
 		setLayout(null);		
 		
+		/*JTabbedPane editing*/
 		viewContainer.setSize(400, 400);
 		viewContainer.setLocation(200, 50);
 		viewContainer.addTab("Graphical View", guiViewPanel);
 		viewContainer.addTab("Text View", textViewPanel);
 		add(viewContainer);
 		
+		/*JTabbedPane JPanel editing*/
 		guiViewPanel.setBackground(Color.BLUE);
+		guiViewPanel.repaint();
 		textViewPanel.setBackground(Color.RED);
+		textViewPanel.repaint();
 		
+		/*Button Panel editing*/
 		moveButtonPanel.setSize(100, 100);
 		moveButtonPanel.setLocation(50, 100);
 		arrowButtonPanel.setSize(100, 100);
 		arrowButtonPanel.setLocation(50, 300);		
-		
 		add(moveButtonPanel);
 		add(arrowButtonPanel);
 	}
 	
-	private void addListeners(){
+	/*JPanel of arrow buttons. Contains inner class listeners*/
+	private class ArrowButtonPanel extends JPanel{
+		private BasicArrowButton up, down, left, right;
+
+		private class ButtonMoveListener implements ActionListener {
+			public void actionPerformed(ActionEvent arg0) {
+				if (arg0.getSource() == up)
+					game.Shoot(Direction.UP);
+				else if (arg0.getSource() == down)
+					game.Shoot(Direction.DOWN);
+				else if (arg0.getSource() == left)
+					game.Shoot(Direction.LEFT);
+				else
+					game.Shoot(Direction.RIGHT);	
+			}
+		}
 		
+		private ArrowButtonPanel() {
+			super();
+			ActionListener buttonListener = new ButtonMoveListener();
+			this.setLayout(new GridLayout(2, 3)); // grid layout 
+			this.setPreferredSize(new Dimension(75, 50)); // set size
+			this.setBackground(Color.white);
+			
+			/* Create the arrow buttons */
+			up = new BasicArrowButton(SwingConstants.NORTH);
+			down = new BasicArrowButton(SwingConstants.SOUTH);
+			left = new BasicArrowButton(SwingConstants.WEST);
+			right = new BasicArrowButton(SwingConstants.EAST);
+			
+			/* Ignore this part, swing is really stupid sometimes */
+			up.setFocusable(false);
+			down.setFocusable(false);
+			left.setFocusable(false);
+			right.setFocusable(false);
+			
+			/* Add the action listener to each button */
+			up.addActionListener(buttonListener);
+			down.addActionListener(buttonListener);
+			left.addActionListener(buttonListener);
+			right.addActionListener(buttonListener);
+			
+			/* Add each button (and empty panels) */
+			add(new JPanel());
+			add(up);
+			add(new JPanel());
+			add(left);
+			add(down);
+			add(right);
+		}
 	}
 	
-	
-	private class TextViewPanel extends JPanel{
-//		@Override
-//		protected void paintComponent(Graphics g){
-//			g.setColor(Color.BLUE);
-//			super.paintComponent(g);
-//			//g.drawString(game.toString(), 0, 0);
-//		}
-	}
-	
-	private class GUIViewPanel extends JPanel{
-//		@Override
-//		protected void paintComponent(Graphics g){
-//			g.setColor(Color.RED);
-//			super.paintComponent(g);
-//			//TODO Paint images according to grid state
-//		}
+	private class MoveButtonPanel extends JPanel{
+
+		private BasicArrowButton up, down, left, right;
+		
+		private class ButtonMoveListener implements ActionListener {
+			public void actionPerformed(ActionEvent arg0) {
+				if (arg0.getSource() == up)
+					game.Move(Direction.UP);
+				else if (arg0.getSource() == down)
+					game.Move(Direction.DOWN);
+				else if (arg0.getSource() == left)
+					game.Move(Direction.LEFT);
+				else
+					game.Move(Direction.RIGHT);	
+			}
+		}	
+		
+		private MoveButtonPanel() {
+			super();
+			ActionListener buttonListener = new ButtonMoveListener();
+			this.setLayout(new GridLayout(2, 3)); // grid layout 
+			this.setPreferredSize(new Dimension(75, 50)); // set size
+			this.setBackground(Color.white);
+			
+			/* Create the arrow buttons */
+			up = new BasicArrowButton(SwingConstants.NORTH);
+			down = new BasicArrowButton(SwingConstants.SOUTH);
+			left = new BasicArrowButton(SwingConstants.WEST);
+			right = new BasicArrowButton(SwingConstants.EAST);
+			
+			/* Ignore this part, swing is really stupid sometimes */
+			up.setFocusable(false);
+			down.setFocusable(false);
+			left.setFocusable(false);
+			right.setFocusable(false);
+			
+			/* Add the action listener to each button */
+			up.addActionListener(buttonListener);
+			down.addActionListener(buttonListener);
+			left.addActionListener(buttonListener);
+			right.addActionListener(buttonListener);
+			
+			/* Add each button (and empty panels) */
+			add(new JPanel());
+			add(up);
+			add(new JPanel());
+			add(left);
+			add(down);
+			add(right);
+		}
 	}
 }

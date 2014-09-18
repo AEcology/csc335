@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Observable;
 import java.util.Random;
 
 /**
@@ -10,17 +11,15 @@ import java.util.Random;
  * @author Jonathan Snavely
  *
  */
-public class Grid {
+public class Grid extends Observable{
 
 	private RoomState grid[][];
 	private RoomState visited[][];
 	
-	//Current room has hunter regardless, so keep track
-	//of what is in the room and 
+	/*Current RoomState of what the hunter is standing in*/
 	private RoomState currentRoom = RoomState.EMPTY;	
 	private int currRow = 0;
 	private int currCol = 0;
-	
 	
 	//Constructor
 	public Grid(){
@@ -37,31 +36,6 @@ public class Grid {
 		placePitsAndSlime();
 		placeWumpusBloodAndMud();
 		placeHunter();
-	}
-	
-	//This is for static testing.
-	public Grid(boolean value){
-		
-		grid = new RoomState[10][10];
-		visited = new RoomState[10][10];
-		
-		for(int i = 0; i < grid.length; i++){
-			for(int j = 0; j < grid.length; j++){
-				grid[i][j] = RoomState.EMPTY;
-				visited[i][j] = RoomState.HIDDEN;
-			}
-		}
-		
-		//Known Placement
-		grid[3][4] = RoomState.SLIME;
-		grid[3][5] = RoomState.PIT;
-		grid[5][4] = RoomState.GOOP;
-		grid[4][4] = RoomState.BLOOD;
-		grid[4][5] = RoomState.WUMPUS;
-		grid[4][3] = RoomState.HUNTER;
-		visited[4][3] = RoomState.VISITED;
-		currRow = 4;
-		currCol = 3;
 	}
 	
 	//Show contents of all rooms	
@@ -193,7 +167,7 @@ public class Grid {
 	save state of new room and set state to HUNTER
 	Note: Directions dont seem the same as their +x, +y offsets 
 	because arrays are represented as arry[row][col]*/
-	public RoomState Move(Direction d){
+	public void Move(Direction d){
 		grid[currRow][currCol] = currentRoom;
 		
 		if (d==Direction.RIGHT){
@@ -221,13 +195,25 @@ public class Grid {
 				--currRow;
 		}
 		
+		/*Moving the hunter*/
 		visited[currRow][currCol] = RoomState.VISITED;
-
 		currentRoom = grid[currRow][currCol];
-
 		grid[currRow][currCol] = RoomState.HUNTER;	
 		
-		return currentRoom;
+		/*Update the observers*/
+		setChanged();
+		if(currentRoom == RoomState.WUMPUS)
+			this.notifyObservers(GameStatus.DIEDWUMPUS);
+		else if(currentRoom == RoomState.PIT)
+			this.notifyObservers(GameStatus.DIEDPIT);
+		else if(currentRoom == RoomState.SLIME)
+			this.notifyObservers(GameStatus.ONSLIME);
+		else if(currentRoom == RoomState.BLOOD)
+			this.notifyObservers(GameStatus.ONBLOOD);
+		else if(currentRoom == RoomState.BLOOD)
+			this.notifyObservers(GameStatus.ONMUD);
+		else 
+			this.notifyObservers(GameStatus.ONNOTHING);
 	}
 	
 	public RoomState getCurrentRoom(){
@@ -243,18 +229,25 @@ public class Grid {
 	}
 	
 	//Shoot: Note: x/y switched because array access is arry[row][col]
-	public boolean Shoot(Direction d){
+	public void Shoot(Direction d){
 		if (d==Direction.UP || d==Direction.DOWN){
 			for(int row=0; row<grid.length; ++row)
-				if (grid[row][currCol]==RoomState.WUMPUS)
-					return true;
+				if (grid[row][currCol]==RoomState.WUMPUS){
+					setChanged();
+					this.notifyObservers(GameStatus.SHOTHIT);
+				}
+					
 		}
 		else if (d==Direction.RIGHT || d==Direction.LEFT){
 			for(int col=0; col<grid.length; ++col)
-				if (grid[currRow][col]==RoomState.WUMPUS)
-					return true;
+				if (grid[currRow][col]==RoomState.WUMPUS){
+					setChanged();
+					this.notifyObservers(GameStatus.SHOTHIT);
+				}
 		}
-		return false;
+		
+		setChanged();
+		this.notifyObservers(GameStatus.SHOTMISSED);
 	}
 	
 	public String toString(){
