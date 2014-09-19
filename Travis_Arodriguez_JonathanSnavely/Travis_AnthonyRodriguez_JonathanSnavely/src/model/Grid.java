@@ -244,14 +244,24 @@ public class Grid extends Observable{
 		return currRow;
 	}
 	
+	public boolean isVisible(int row, int col){
+		return (visited[row][col] == RoomState.VISITED);
+	}
+	
+	public RoomState state(int row, int col){
+		return grid[row][col];
+	}
+	
 	//Shoot: Note: x/y switched because array access is arry[row][col]
 	public void Shoot(Direction d){
+		setChanged();
 		if (d==Direction.UP || d==Direction.DOWN){
 			for(int row=0; row<grid.length; ++row)
 				if (grid[row][currCol]==RoomState.WUMPUS){
 					setChanged();
 					this.notifyObservers(GameStatus.SHOTHIT);
 				}
+			this.notifyObservers(GameStatus.SHOTMISSED);
 					
 		}
 		else if (d==Direction.RIGHT || d==Direction.LEFT){
@@ -260,10 +270,10 @@ public class Grid extends Observable{
 					setChanged();
 					this.notifyObservers(GameStatus.SHOTHIT);
 				}
+			this.notifyObservers(GameStatus.SHOTMISSED);
 		}
 		else
 			this.notifyObservers(GameStatus.SHOTMISSED);
-		setChanged();
 	}
 	
 	public String toString(){

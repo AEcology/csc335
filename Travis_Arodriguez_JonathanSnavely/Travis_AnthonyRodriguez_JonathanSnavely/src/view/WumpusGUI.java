@@ -32,7 +32,7 @@ public class WumpusGUI extends JFrame implements Observer{
 	public WumpusGUI(){
 		game = new Grid();
 		textViewPanel = new TextViewPanel(game);
-		guiViewPanel = new GUIViewPanel();
+		guiViewPanel = new GUIViewPanel(game);
 		viewContainer = new JTabbedPane();
 		moveButtonPanel = new MoveButtonPanel();
 		arrowButtonPanel = new ArrowButtonPanel();
