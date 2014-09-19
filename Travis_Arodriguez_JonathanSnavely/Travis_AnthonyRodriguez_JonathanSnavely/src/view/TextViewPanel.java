@@ -42,23 +42,10 @@ public class TextViewPanel extends JPanel implements Observer{
 		
 		else if(status == GameStatus.DIEDPIT)
 			game.RevealRooms();
-		/*
-		else if(status == GameStatus.ONSLIME)
-			game.RevealRooms();
-
-		else if(status == GameStatus.ONBLOOD)
-			game.RevealRooms();
-
-		else if(status == GameStatus.ONMUD)
-			game.RevealRooms();
-		*/
-		
-		//TODO: End the game if appropriate here
 
 		repaint();
 	}
 	
-	//TODO: Implement the display on the JPanel
 	@Override
 	protected void paintComponent(Graphics g){
 		setBackground(Color.BLACK);

@@ -42,7 +42,7 @@ public class GUIViewPanel extends JPanel implements Observer{
 			hunter = ImageIO.read(getClass().getResource("/WumpusImages/TheHunter.png"));
 			wumpus = ImageIO.read(getClass().getResource("/WumpusImages/Wumpus.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// Auto-generated catch block
 			e.printStackTrace();
 		}
 		setBackground(Color.BLACK);
@@ -109,7 +109,6 @@ public class GUIViewPanel extends JPanel implements Observer{
 			}
 	}
 	
-	//TODO: Implement the display on the JPanel
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -10,6 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -69,7 +71,7 @@ public class WumpusGUI extends JFrame implements Observer{
 		moveButtonPanel.setSize(100, 100);
 		moveButtonPanel.setLocation(50, 100);
 		arrowButtonPanel.setSize(100, 100);
-		arrowButtonPanel.setLocation(50, 300);		
+		arrowButtonPanel.setLocation(50, 300);	
 		add(moveButtonPanel);
 		add(arrowButtonPanel);
 	}
@@ -94,9 +96,8 @@ public class WumpusGUI extends JFrame implements Observer{
 		private ArrowButtonPanel() {
 			super();
 			ActionListener buttonListener = new ButtonMoveListener();
-			this.setLayout(new GridLayout(2, 3)); // grid layout 
+			this.setLayout(new GridLayout(3, 3)); // grid layout 
 			this.setPreferredSize(new Dimension(75, 50)); // set size
-			this.setBackground(Color.white);
 			
 			/* Create the arrow buttons */
 			up = new BasicArrowButton(SwingConstants.NORTH);
@@ -123,7 +124,15 @@ public class WumpusGUI extends JFrame implements Observer{
 			add(left);
 			add(down);
 			add(right);
+			add(new JPanel());
+			add(new JLabel("Shoot"));
 		}
+		
+		@Override
+		protected void paintComponent(Graphics g){
+			super.paintComponent(g);
+			g.drawString("test", 0, 0);
+		}	
 	}
 	
 	private class MoveButtonPanel extends JPanel{
@@ -146,9 +155,8 @@ public class WumpusGUI extends JFrame implements Observer{
 		private MoveButtonPanel() {
 			super();
 			ActionListener buttonListener = new ButtonMoveListener();
-			this.setLayout(new GridLayout(2, 3)); // grid layout 
+			this.setLayout(new GridLayout(3, 3)); // grid layout 
 			this.setPreferredSize(new Dimension(75, 50)); // set size
-			this.setBackground(Color.white);
 			
 			/* Create the arrow buttons */
 			up = new BasicArrowButton(SwingConstants.NORTH);
@@ -175,6 +183,8 @@ public class WumpusGUI extends JFrame implements Observer{
 			add(left);
 			add(down);
 			add(right);
+			add(new JPanel());
+			add(new JLabel("Move"));
 		}
 	}
 
