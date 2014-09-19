@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -27,6 +28,7 @@ public class GUIViewPanel extends JPanel implements Observer{
 	Image pit;
 	Image hunter;
 	Image wumpus;
+	GameStatus status;
 	
 	public GUIViewPanel(Grid initGame){
 		super();
@@ -46,13 +48,14 @@ public class GUIViewPanel extends JPanel implements Observer{
 			e.printStackTrace();
 		}
 		setBackground(Color.BLACK);
+		this.setFont(new Font(Font.MONOSPACED, Font.BOLD, 22));
 		repaint();
 	}
 	
 	
 	@Override
 	public void update(Observable arg0, Object roomState) {
-		GameStatus status = (GameStatus)roomState;
+		status = (GameStatus)roomState;
 		game = (Grid) arg0;
 			
 		if(status == GameStatus.SHOTMISSED)
@@ -114,5 +117,12 @@ public class GUIViewPanel extends JPanel implements Observer{
 		super.paintComponent(g);
 		setBackground(Color.BLACK);
 		PaintTiles(g);
+		g.setColor(Color.WHITE);
+		if (status==GameStatus.SHOTHIT)
+			g.drawString("You got 'em! YAAAY!", 120, 480);
+		else if (status==GameStatus.SHOTMISSED)
+			g.drawString("I'm gonna die down here...", 120, 480);
+		else
+			g.drawString(game.getRoomText(), 120, 480);
 	}
 }
